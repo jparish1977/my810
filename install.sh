@@ -23,17 +23,20 @@ r5u87x-loader --reload
 cd ..
 
 # 4. Stop lightdm from loading in init2
-mv /etc/rc2.d/S18lightdm /etc/rc2.d/K18lightdm
-update-rc.d lightdm defaults
+# mv /etc/rc2.d/S18lightdm /etc/rc2.d/K18lightdm
+# update-rc.d lightdm defaults
 
 # 5. Edit /usr/share/X11/xorg.conf.d/10-evdev.conf 
 # 	 to add touchscreen and cal info. Use xinput_calibrator
 #	 to change cal info if needed.
+# JAP: Min hates all versions of xinput_calibrator, and I had to
+# hand tweak until I found the spot. These seem to work nicely
 
 echo 'Section "InputClass"
 	Identifier	"calibration"
 	MatchProduct	"Fujitsu Component USB Touch Panel"
-	Option	"Calibration"	"139 3695 279 3914"
+	#Option	"Calibration"	"139 3695 279 3914"
+	Option "Calibration"   "139 3695  279 2700"	
 EndSection' > /usr/share/X11/xorg.conf.d/99-calibration.conf
 
 echo '37c37
@@ -44,18 +47,18 @@ echo '37c37
 > 	MatchUSBID "05ca:1841"'| patch -p0 /usr/share/X11/xorg.conf.d/10-evdev.conf
 
 # 6. Change PCMCIA config to allow mapping of CF cards
-echo '26a27
-> include memory 0xf0000000-0xf0ffffff' | patch -p0 /etc/pcmcia/config.opts
+#echo '26a27
+#> include memory 0xf0000000-0xf0ffffff' | patch -p0 /etc/pcmcia/config.opts
 
 # 7. Autologin root
-echo '54c54
-< 1:2345:respawn:/sbin/getty 38400 tty1
----
-> 1:2345:respawn:/bin/login -f root tty1 </dev/tty1 >/dev/tty1 2>&1' | patch -p0 /etc/inittab
+#echo '54c54
+#< 1:2345:respawn:/sbin/getty 38400 tty1
+#---
+#> 1:2345:respawn:/bin/login -f root tty1 </dev/tty1 >/dev/tty1 2>&1' | patch -p0 /etc/inittab
 
 # 8. Auto startx
-echo '13a14
-> su -l root -c startx' | patch -p0 /etc/rc.local
+#echo '13a14
+#> su -l root -c startx' | patch -p0 /etc/rc.local
 
 # 9. Setting up ntp time sync at boot
-update-rc.d hwclock.sh defaults
+# update-rc.d hwclock.sh defaults
