@@ -1,5 +1,11 @@
-my810
+my810 - Linux Mint 18.1 Serena
 =====
+**YOINK**
+
+Collecting bits and pieces to get my u810 up and running. This was a fine foundation...
+
+*********
+
 
 Introduction
 -------------
